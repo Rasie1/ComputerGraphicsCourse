@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
+using System.Drawing;
 
 namespace Engine
 {
@@ -19,7 +18,7 @@ namespace Engine
 
         public Ball(Point position, Point speed, Double radius, Color color)
         {
-            brush = new SolidColorBrush(color);
+            brush = new SolidBrush(color);
             pen = new Pen(brush, 2);
 
             Position = position;
@@ -36,30 +35,30 @@ namespace Engine
         public void UpdatePhysics(Double dt, World world)
         {
             Speed = new Point(
-                Math.Min(world.MaxSpeed, (Speed.X + world.Gravity.X) * world.Friction),
-                Math.Min(world.MaxSpeed, (Speed.Y + world.Gravity.Y) * world.Friction));
+                (int)Math.Min(world.MaxSpeed, (Speed.X + world.Gravity.X) * world.Friction),
+                (int)Math.Min(world.MaxSpeed, (Speed.Y + world.Gravity.Y) * world.Friction));
             var nextPosition = new Point(
-                Position.X + (Speed.X) * dt,
-                Position.Y + (Speed.Y) * dt);
+                (int)(Position.X + (Speed.X) * dt),
+                (int)(Position.Y + (Speed.Y) * dt));
 
             if (nextPosition.X < 0 + Radius)
             {
-                nextPosition.X = Radius;
+                nextPosition.X = (int)Radius;
                 Speed = new Point(-Speed.X, Speed.Y);
             }
             if (nextPosition.X > world.Size.Width - Radius)
             {
-                nextPosition.X = world.Size.Width - Radius;
+                nextPosition.X = (int)(world.Size.Width - Radius);
                 Speed = new Point(-Speed.X, Speed.Y);
             }
             if (nextPosition.Y < 0 + Radius)
             {
-                nextPosition.Y = Radius;
+                nextPosition.Y = (int)Radius;
                 Speed = new Point(Speed.X, -Speed.Y);
             }
             if (nextPosition.Y > world.Size.Height - Radius)
             {
-                nextPosition.Y = world.Size.Height - Radius;
+                nextPosition.Y = (int)(world.Size.Height - Radius);
                 Speed = new Point(Speed.X, -Speed.Y);
             }
             
@@ -67,9 +66,10 @@ namespace Engine
             Position = nextPosition;
         }
 
-        public void Render(DrawingContext target)
+        public void Render(Graphics target)
         {
-            target.DrawEllipse(brush, pen, Position, Radius, Radius);
+            var rect = new Rectangle(Position.X + -(int)Radius, Position.Y + -(int)Radius, (int)Radius, (int)Radius);
+            target.FillEllipse(brush, rect);
         }
     }
 }

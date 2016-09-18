@@ -70,7 +70,8 @@ namespace PainterApplication
         private void OpenImage(BitmapImage bmp)
         {
             DrawingVisual drawingVisual = new DrawingVisual();
-            var rect = new System.Windows.Rect(0, 0, 256, 256);
+            var rect = new System.Windows.Rect(0, 0, 
+                mainImage.DesiredSize.Width, mainImage.DesiredSize.Height);
             using (DrawingContext drawingContext = drawingVisual.RenderOpen())
                 drawingContext.DrawImage(bmp, rect);
             renderTargetBitmap.Render(drawingVisual);
@@ -79,8 +80,6 @@ namespace PainterApplication
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowMessageInToolbox("Open - coming soon in CW2");
-
             var dialog = new Microsoft.Win32.OpenFileDialog();
             var result = dialog.ShowDialog();
 
@@ -145,7 +144,7 @@ namespace PainterApplication
 
         private void fillButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowMessageInToolbox("Fill selected - coming soon in CW2");
+            ShowMessageInToolbox("Fill selected");
             UnblockToolButtons();
             SelectFillTool();
         }

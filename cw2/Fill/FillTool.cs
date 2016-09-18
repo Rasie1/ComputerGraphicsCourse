@@ -10,6 +10,7 @@ namespace PainterApplication
 {
     public class FillTool : ITool
     {
+        public Color Color { get; set; }
         public void Down(DrawingContext target, Point pos)
         {
         }
@@ -23,6 +24,21 @@ namespace PainterApplication
 
         }
 
+        private void SetPixel(DrawingContext target, Point pos)
+        {
+
+        }
+        
+        private void Fill(DrawingContext target, Point pos)
+        {
+            if (pos.X < 0 || pos.Y < 0)
+                return;
+            SetPixel(target, pos);
+            Fill(target, new Point(pos.X - 1, pos.Y));
+            Fill(target, new Point(pos.X, pos.Y - 1));
+            Fill(target, new Point(pos.X + 1, pos.Y));
+            Fill(target, new Point(pos.X, pos.Y + 1));
+        }
         //private void FillImage(Image img, Point position, Color color)
         //{
         //    var brush = new SolidBrush(color);

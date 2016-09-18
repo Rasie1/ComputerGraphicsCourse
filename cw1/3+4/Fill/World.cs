@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
+using System.Drawing;
 
 namespace Engine
 {
@@ -20,7 +19,7 @@ namespace Engine
 
         public World(Size size)
         {
-            brush = new SolidColorBrush(Colors.Azure);
+            brush = new SolidBrush(Color.Azure);
             pen = new Pen(brush, 1000);
 
             Size = size;
@@ -29,10 +28,10 @@ namespace Engine
             Friction = 0.975;
         }
         
-        public void Render(DrawingContext target)
+        public void Render(Graphics target)
         {
-            var rect = new Rect(Size);
-            target.DrawRectangle(brush, pen, rect);
+            var rect = new Rectangle(new Point(0, 0), Size);
+            target.DrawRectangle(pen, rect);
         }
     }
 }
