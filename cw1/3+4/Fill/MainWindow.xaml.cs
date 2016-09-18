@@ -30,7 +30,7 @@ namespace PainterApplication
         System.Diagnostics.Stopwatch timer;
         long previousTime;
 
-        const int ballsAmount = 50;
+        const int ballsAmount = 32;
         double gravityChange = 100;
 
 
@@ -70,7 +70,7 @@ namespace PainterApplication
                 color.G = (byte)random.Next(0, 255);
                 color.B = (byte)random.Next(0, 255);
                 color.A = 255;
-                var radius = random.NextDouble() * 40 + 5.0;
+                var radius = random.NextDouble() * 65 + 5.0;
 
                 var speed = new Point(random.NextDouble() * 1000.0 - 500.0, random.NextDouble() * 1000.0 - 500.0);
                 var position =
