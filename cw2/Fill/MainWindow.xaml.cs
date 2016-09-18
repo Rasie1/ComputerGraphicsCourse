@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Drawing;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -22,7 +22,7 @@ namespace PainterApplication
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {
         bool isMouseDown = false;
         RenderTargetBitmap renderTargetBitmap;
@@ -33,22 +33,47 @@ namespace PainterApplication
         ITool brushTool = new BrushTool();
         ITool fillTool = new FillTool();
 
+
+        byte[] rgbValues;
+        System.Drawing.Bitmap bmp;
+        System.Drawing.Graphics graphics;
+
+
         public MainWindow()
         {
             InitializeComponent();
 
             SelectBrushTool();
+            
 
-            renderTargetBitmap = new RenderTargetBitmap(
-                829, 553, 
-                96, 96, 
-                PixelFormats.Default);
+            LoadRenderer();
+        }
 
-            mainImage.Source = CreateBitmap(
-                829, 553, 96,
-                drawingContext =>
-                {
-                });
+        private void LoadRenderer()
+        {
+            bmp = new System.Drawing.Bitmap(642, 445);
+            graphics = System.Drawing.Graphics.FromImage(bmp);
+
+            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
+            System.Drawing.Imaging.BitmapData bmpData =
+                bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                bmp.PixelFormat);
+
+            IntPtr ptr = bmpData.Scan0;
+
+            int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
+            rgbValues = new byte[bytes];
+
+            System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+
+            bmp.UnlockBits(bmpData);
+
+            Render();
+        }
+
+        public void Render()
+        {
+            mainImage.Source = loadBitmap(bmp);
         }
 
         public BitmapSource CreateBitmap(

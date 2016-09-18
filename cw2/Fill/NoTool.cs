@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
+using System.Drawing;
 
 namespace PainterApplication
 {
     public class NoTool : ITool
     {
-        public void Down(DrawingContext target, Point pos)
+        public void Down(Graphics target, Point pos)
         {
         }
 
-        public void Up(DrawingContext target, Point pos)
+        public void Up(Graphics target, Point pos)
         {
         }
 
-        public void Move(DrawingContext target, Point pos)
+        public void Move(Graphics target, Point pos)
         {
 
         }

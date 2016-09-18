@@ -16,6 +16,9 @@ namespace Engine
         Pen pen;
         Brush brush;
 
+
+
+
         public Ball(Point position, Point speed, Double radius, Color color)
         {
             brush = new SolidBrush(color);
