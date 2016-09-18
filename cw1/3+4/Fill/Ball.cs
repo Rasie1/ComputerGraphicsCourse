@@ -8,10 +8,8 @@ using System.Windows.Media;
 
 namespace Engine
 {
-    class Ball : IRenderable, IActor
+    class Ball : IRenderable, IActor, IBody
     {
-
-        public Point Gravity { get; set; }
         public Point Position { get; set; }
         public Point Speed { get; set; }
         public Double Radius { get; set; }
@@ -24,22 +22,25 @@ namespace Engine
             brush = new SolidColorBrush(color);
             pen = new Pen(brush, 2);
 
-            Gravity = new Point(0, 0);
             Position = position;
             Speed = speed;
             Radius = radius;
         }
-
-        private Point CalculateNextPosition(Double dt)
-        {
-            return new Point(
-                Position.X + (Speed.X + Gravity.X) * dt,
-                Position.Y + (Speed.Y + Gravity.Y) * dt);
-        }
+        
 
         public void Update(Double dt, World world)
         {
-            var nextPosition = CalculateNextPosition(dt);
+            UpdatePhysics(dt, world);
+        }
+
+        public void UpdatePhysics(Double dt, World world)
+        {
+            Speed = new Point(
+                Math.Min(world.MaxSpeed, (Speed.X + world.Gravity.X) * world.Friction),
+                Math.Min(world.MaxSpeed, (Speed.Y + world.Gravity.Y) * world.Friction));
+            var nextPosition = new Point(
+                Position.X + (Speed.X) * dt,
+                Position.Y + (Speed.Y) * dt);
 
             if (nextPosition.X < 0 + Radius)
             {

@@ -31,6 +31,7 @@ namespace PainterApplication
         long previousTime;
 
         const int ballsAmount = 50;
+        double gravityChange = 100;
 
 
         public MainWindow()
@@ -118,6 +119,31 @@ namespace PainterApplication
             }
             renderTargetBitmap.Render(drawingVisual);
         }
-        
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left)
+            {
+                world.Gravity = new Point(-gravityChange, 0);
+            }
+            if (e.Key == Key.Right)
+            {
+                world.Gravity = new Point(gravityChange, 0);
+            }
+            if (e.Key == Key.Up)
+            {
+                world.Gravity = new Point(0, -gravityChange);
+            }
+            if (e.Key == Key.Down)
+            {
+                world.Gravity = new Point(0, gravityChange);
+            }
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Left || e.Key == Key.Right)
+                world.Gravity = new Point(0, 0);
+        }
     }
 }
