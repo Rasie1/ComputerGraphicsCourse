@@ -30,6 +30,8 @@ namespace PainterApplication
 
         public void Up(DrawingContext target, Point pos)
         {
+            if (previousPoint == null)
+                return;
             target.DrawLine(pen, pos, previousPoint.Value);
             previousPoint = null;
         }

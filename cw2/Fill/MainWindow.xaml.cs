@@ -67,8 +67,13 @@ namespace PainterApplication
             return renderTargetBitmap;
         }
 
-        private void OpenImage(Bitmap bmp)
+        private void OpenImage(BitmapImage bmp)
         {
+            DrawingVisual drawingVisual = new DrawingVisual();
+            var rect = new System.Windows.Rect(0, 0, 256, 256);
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+                drawingContext.DrawImage(bmp, rect);
+            renderTargetBitmap.Render(drawingVisual);
         }
 
 
@@ -76,16 +81,16 @@ namespace PainterApplication
         {
             ShowMessageInToolbox("Open - coming soon in CW2");
 
-            //var dialog = new Microsoft.Win32.OpenFileDialog(); 
-            //var result = dialog.ShowDialog();
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            var result = dialog.ShowDialog();
 
-            //if (result == true)
-            //{
-            //    var filename = dialog.FileName;
+            if (result == true)
+            {
+                var filename = dialog.FileName;
+                
+                OpenImage(new BitmapImage(new Uri(filename)));
+            }
 
-            //    OpenImage(new Bitmap(filename));
-            //}
-            
         }
 
         private void ShowMessageInToolbox(string s)
