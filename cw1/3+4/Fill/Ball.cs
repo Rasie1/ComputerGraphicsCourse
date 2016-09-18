@@ -30,28 +30,38 @@ namespace Engine
             Radius = radius;
         }
 
-        private Point CalculateNextPosition(float dt)
+        private Point CalculateNextPosition(Double dt)
         {
             return new Point(
                 Position.X + (Speed.X + Gravity.X) * dt,
                 Position.Y + (Speed.Y + Gravity.Y) * dt);
         }
 
-        public void Update(float dt, World world)
+        public void Update(Double dt, World world)
         {
             var nextPosition = CalculateNextPosition(dt);
 
-            var outOfBoundsX = (nextPosition.X < 0 + Radius) ||
-                (nextPosition.X > world.Size.Width - Radius);
-            var outOfBoundsY = (nextPosition.Y < 0 + Radius) ||
-                (nextPosition.Y > world.Size.Height - Radius);
-
-            if (outOfBoundsX || outOfBoundsY)
+            if (nextPosition.X < 0 + Radius)
             {
-                Speed = new Point(outOfBoundsX ? -Speed.X : Speed.Y,
-                                  outOfBoundsY ? -Speed.Y : Speed.Y);
-                nextPosition = CalculateNextPosition(dt);
+                nextPosition.X = Radius;
+                Speed = new Point(-Speed.X, Speed.Y);
             }
+            if (nextPosition.X > world.Size.Width - Radius)
+            {
+                nextPosition.X = world.Size.Width - Radius;
+                Speed = new Point(-Speed.X, Speed.Y);
+            }
+            if (nextPosition.Y < 0 + Radius)
+            {
+                nextPosition.Y = Radius;
+                Speed = new Point(Speed.X, -Speed.Y);
+            }
+            if (nextPosition.Y > world.Size.Height - Radius)
+            {
+                nextPosition.Y = world.Size.Height - Radius;
+                Speed = new Point(Speed.X, -Speed.Y);
+            }
+            
 
             Position = nextPosition;
         }

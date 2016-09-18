@@ -13,7 +13,7 @@ namespace Engine
         Pen pen;
         Brush brush;
 
-        public Size Size { get; private set; }
+        public Size Size { get; set; }
 
         public World(Size size)
         {

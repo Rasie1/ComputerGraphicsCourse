@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PainterApplication"
         mc:Ignorable="d"
-        Title="Paintshop CW1" Height="445" Width="642" MinWidth="256" MinHeight="256">
+        Title="Paintshop CW1" Height="445" Width="642" MinWidth="256" MinHeight="256" ResizeMode="NoResize">
     <Grid>
-        <Image x:Name="mainImage" Margin="10" Stretch="None" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="placeholder.png"/>
+        <Image x:Name="mainImage" Margin="10" Stretch="Fill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
     </Grid>
 </Window>

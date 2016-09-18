@@ -26,7 +26,7 @@ namespace PainterApplication
         RenderTargetBitmap renderTargetBitmap;
 
         List<Ball> objects = new List<Ball>();
-        World world = new World(new Size(829, 553));
+        World world = new World(new Size(0, 0));
         System.Diagnostics.Stopwatch timer;
         long previousTime;
 
@@ -37,16 +37,21 @@ namespace PainterApplication
         {
             InitializeComponent();
 
+            var worldSize = new Size(768, 512);
+
             renderTargetBitmap = new RenderTargetBitmap(
-                829, 553, 
+                (int)worldSize.Width, (int)worldSize.Height, 
                 96, 96, 
                 PixelFormats.Default);
 
+            world.Size = worldSize;
+
             mainImage.Source = CreateBitmap(
-                829, 553, 96,
+                (int)world.Size.Width, (int)world.Size.Height, 96,
                 drawingContext =>
                 {
                 });
+
 
             DispatcherTimer t = new DispatcherTimer();
             t.Tick += Tick;
@@ -65,14 +70,12 @@ namespace PainterApplication
                 color.B = (byte)random.Next(0, 255);
                 color.A = 255;
                 var radius = random.NextDouble() * 40 + 5.0;
-                objects.Add(
-                    new Ball(
-                        new Point(random.NextDouble() * (world.Size.Width - radius) + radius,
-                                  random.NextDouble() * (world.Size.Height - radius) + radius),
-                        new Point(random.NextDouble() * 1000.0 - 500.0, random.NextDouble() * 1000.0 - 500.0),
-                        radius,
-                        color
-                        ));
+
+                var speed = new Point(random.NextDouble() * 1000.0 - 500.0, random.NextDouble() * 1000.0 - 500.0);
+                var position =
+                    new Point(random.NextDouble() * (world.Size.Width - radius) + radius + speed.X,
+                              random.NextDouble() * (world.Size.Height - radius) + radius + speed.Y);
+                objects.Add(new Ball(position, speed, radius, color));
             }
         }
 
@@ -82,7 +85,7 @@ namespace PainterApplication
             var currentTime = timer.ElapsedMilliseconds;
             foreach (var x in objects)
             {
-                x.Update((currentTime - previousTime) / (float)1000.0, world);
+                x.Update((currentTime - previousTime) / (Double)1000.0, world);
             }
             Render();
             previousTime = currentTime;

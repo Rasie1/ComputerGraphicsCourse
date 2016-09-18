@@ -8,6 +8,6 @@ namespace Engine
 {
     interface IActor
     {
-        void Update(float dt, World world);
+        void Update(Double dt, World world);
     }
 }
