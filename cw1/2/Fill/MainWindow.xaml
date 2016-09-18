@@ -1,0 +1,18 @@
+﻿<Window x:Class="PainterApplication.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PainterApplication"
+        mc:Ignorable="d"
+        Title="Paintshop CW1" Height="445" Width="642" MinWidth="256" MinHeight="256">
+    <Grid>
+        <Image x:Name="mainImage" Margin="10,40,10,10" MouseLeftButtonDown="mainImage_MouseLeftButtonDown" Stretch="None" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseMove="mainImage_MouseMove" MouseLeftButtonUp="mainImage_MouseLeftButtonUp" Source="placeholder.png" MouseLeave="mainImage_MouseLeave" MouseEnter="mainImage_MouseEnter"/>
+        <Button x:Name="openButton" Content="📂" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Width="20" Click="openButton_Click"/>
+        <Label x:Name="label" Content="Welcome!&#xD;&#xA;" Margin="70,7,70,12" VerticalAlignment="Top" Height="25"/>
+        <Button x:Name="brushButton" Content="🖌" HorizontalAlignment="Right" Margin="0,10,10,10" VerticalAlignment="Top" Width="20" Click="brushButton_Click"/>
+        <Button x:Name="fillButton" Content="▧" Margin="0,10,40,10" VerticalAlignment="Top" Width="20" Click="fillButton_Click" HorizontalAlignment="Right"/>
+        <Button x:Name="saveButton" Content="💾" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top" Width="20" Click="saveButton_Click"/>
+
+    </Grid>
+</Window>
