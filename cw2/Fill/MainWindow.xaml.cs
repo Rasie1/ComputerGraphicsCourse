@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Windows;
 
 namespace PainterApplication
 {
@@ -25,7 +26,6 @@ namespace PainterApplication
     public partial class MainWindow : System.Windows.Window
     {
         bool isMouseDown = false;
-        RenderTargetBitmap renderTargetBitmap;
 
         ITool currentTool;
 
@@ -47,6 +47,10 @@ namespace PainterApplication
             
 
             LoadRenderer();
+
+            var fill = fillTool as FillTool;
+            fill.ImageData = bmp;
+            fill.Color = System.Drawing.Color.Black;
         }
 
         private void LoadRenderer()
@@ -71,37 +75,41 @@ namespace PainterApplication
             Render();
         }
 
+        [DllImport("gdi32")]
+        static extern int DeleteObject(IntPtr o);
+
+        public static BitmapSource loadBitmap(System.Drawing.Bitmap source)
+        {
+            IntPtr ip = source.GetHbitmap();
+            BitmapSource bs = null;
+            try
+            {
+                bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(ip,
+                   IntPtr.Zero, System.Windows.Int32Rect.Empty,
+                   System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+            }
+            finally
+            {
+                DeleteObject(ip);
+            }
+
+            return bs;
+        }
+
         public void Render()
         {
             mainImage.Source = loadBitmap(bmp);
         }
-
-        public BitmapSource CreateBitmap(
-            int width, 
-            int height, 
-            double dpi, 
-            Action<DrawingContext> initialRenderAction)
-        {
-            DrawingVisual drawingVisual = new DrawingVisual();
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-            {
-                initialRenderAction(drawingContext);
-            }
-            renderTargetBitmap.Render(drawingVisual);
-
-            return renderTargetBitmap;
-        }
-
+        
         private void OpenImage(BitmapImage bmp)
         {
-            DrawingVisual drawingVisual = new DrawingVisual();
-            var rect = new System.Windows.Rect(0, 0, 
-                mainImage.DesiredSize.Width, mainImage.DesiredSize.Height);
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-                drawingContext.DrawImage(bmp, rect);
-            renderTargetBitmap.Render(drawingVisual);
+            //DrawingVisual drawingVisual = new DrawingVisual();
+            //var rect = new System.Windows.Rect(0, 0, 
+            //    mainImage.DesiredSize.Width, mainImage.DesiredSize.Height);
+            //using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            //    drawingContext.DrawImage(bmp, rect);
+            //renderTargetBitmap.Render(drawingVisual);
         }
-
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
@@ -128,10 +136,8 @@ namespace PainterApplication
             this.label.Content = pos.ToString();
             isMouseDown = true;
 
-            DrawingVisual drawingVisual = new DrawingVisual();
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-                currentTool.Down(drawingContext, pos);
-            renderTargetBitmap.Render(drawingVisual);
+            currentTool.Down(graphics, new System.Drawing.Point((int)pos.X, (int)pos.Y));
+            Render();
         }
 
         private void mainImage_MouseMove(object sender, MouseEventArgs e)
@@ -141,10 +147,8 @@ namespace PainterApplication
                 var pos = e.GetPosition(this.mainImage);
                 this.label.Content = pos.ToString();
 
-                DrawingVisual drawingVisual = new DrawingVisual();
-                using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-                    currentTool.Move(drawingContext, pos);
-                renderTargetBitmap.Render(drawingVisual);
+                currentTool.Move(graphics, new System.Drawing.Point((int)pos.X, (int)pos.Y));
+                Render();
             }
         }
 
@@ -155,10 +159,9 @@ namespace PainterApplication
             var pos = e.GetPosition(this.mainImage);
             this.label.Content = pos.ToString();
 
-            DrawingVisual drawingVisual = new DrawingVisual();
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-                currentTool.Up(drawingContext, pos);
-            renderTargetBitmap.Render(drawingVisual);
+            currentTool.Up(graphics, new System.Drawing.Point((int)pos.X, (int)pos.Y));
+
+            Render();
         }
 
         private void UnblockToolButtons()
@@ -213,7 +216,7 @@ namespace PainterApplication
             if (result == true)
             {
                 var filename = dialog.FileName;
-                SaveClipboardImageToFile(renderTargetBitmap, filename);
+                SaveClipboardImageToFile(loadBitmap(bmp), filename);
             }
         }
 

@@ -9,9 +9,12 @@ namespace PainterApplication
 {
     public class FillTool : ITool
     {
+        public Bitmap ImageData { get; set; }
         public Color Color { get; set; }
+
         public void Down(Graphics target, Point pos)
         {
+            Fill(target, pos);
         }
 
         public void Up(Graphics target, Point pos)
@@ -25,28 +28,36 @@ namespace PainterApplication
 
         private void SetPixel(Graphics target, Point pos)
         {
+            ImageData.SetPixel(pos.X, pos.Y, Color);
+        }
 
+        private bool CheckPixel(Point pos)
+        {
+            if (pos.X < 0 || pos.Y < 0)
+                return false;
+            if (pos.X >= ImageData.Size.Width || pos.Y >= ImageData.Size.Height)
+                return false;
+            var pixel = ImageData.GetPixel(pos.X, pos.Y);
+            if (pixel.ToArgb() == Color.ToArgb())
+                return false;
+            return true;
         }
         
         private void Fill(Graphics target, Point pos)
         {
-            if (pos.X < 0 || pos.Y < 0)
-                return;
-            SetPixel(target, pos);
-            Fill(target, new Point(pos.X - 1, pos.Y));
-            Fill(target, new Point(pos.X, pos.Y - 1));
-            Fill(target, new Point(pos.X + 1, pos.Y));
-            Fill(target, new Point(pos.X, pos.Y + 1));
+            var pixels = new Stack<Point>();
+            pixels.Push(pos);
+            while (pixels.Count > 0)
+            {
+                var x = pixels.Pop();
+                if (!CheckPixel(x))
+                    continue;
+                SetPixel(target, x);
+                pixels.Push(new Point(x.X - 1, x.Y));
+                pixels.Push(new Point(x.X + 1, x.Y));
+                pixels.Push(new Point(x.X, x.Y - 1));
+                pixels.Push(new Point(x.X, x.Y + 1));
+            }
         }
-        //private void FillImage(Image img, Point position, Color color)
-        //{
-        //    var brush = new SolidBrush(color);
-        //    var pen = new Pen(brush);
-            
-        //    using (Graphics g = Graphics.FromImage(img))
-        //    {
-        //        g.DrawLine(pen, new Point(0, 0), position);
-        //    }
-        //}
     }
 }
