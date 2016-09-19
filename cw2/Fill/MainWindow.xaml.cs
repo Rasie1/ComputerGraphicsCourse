@@ -38,6 +38,8 @@ namespace PainterApplication
         System.Drawing.Bitmap bmp;
         System.Drawing.Graphics graphics;
 
+        System.Drawing.Color color;
+
 
         public MainWindow()
         {
@@ -51,6 +53,13 @@ namespace PainterApplication
             var fill = fillTool as FillTool;
             fill.ImageData = bmp;
             fill.Color = System.Drawing.Color.Black;
+        }
+
+        private void SetColor(System.Drawing.Color newColor)
+        {
+            var fill = fillTool as FillTool;
+            color = newColor;
+            fill.Color = color;
         }
 
         private void LoadRenderer()
@@ -228,6 +237,12 @@ namespace PainterApplication
                 encoder.Frames.Add(BitmapFrame.Create(image));
                 encoder.Save(fileStream);
             }
+        }
+
+        private void colorImage_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            SetColor(System.Drawing.Color.FromArgb(255, 14, 14, 14));
+
         }
     }
 }
