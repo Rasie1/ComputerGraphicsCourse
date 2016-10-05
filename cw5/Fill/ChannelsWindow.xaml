@@ -1,0 +1,17 @@
+﻿<Window x:Class="PainterApplication.ChannelsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Fill"
+        mc:Ignorable="d"
+        Title="ChannelsWindow" Height="300" Width="300" ResizeMode="NoResize">
+    <Grid>
+        <Button x:Name="applyButton" Content="Apply" HorizontalAlignment="Left" Margin="207,243,0,0" VerticalAlignment="Top" Width="75"/>
+        <CheckBox x:Name="redCheckBox" Content="Red" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True"/>
+        <CheckBox x:Name="redCheckBox_Copy" Content="Green" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True"/>
+        <CheckBox x:Name="redCheckBox_Copy1" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="True"/>
+        <Button x:Name="applyButton_Copy" Content="Revert" HorizontalAlignment="Left" Margin="10,243,0,0" VerticalAlignment="Top" Width="75"/>
+
+    </Grid>
+</Window>
