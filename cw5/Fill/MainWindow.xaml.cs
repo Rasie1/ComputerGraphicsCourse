@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -18,6 +17,10 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Windows;
 
+namespace Fill
+{
+
+}
 namespace PainterApplication
 {
     /// <summary>
@@ -37,11 +40,9 @@ namespace PainterApplication
         HSVTool hsvTool = new HSVTool();
         ChannelsWindow channelsWindow = new ChannelsWindow();
 
-
         byte[] rgbValues;
         System.Drawing.Bitmap bmp;
         System.Drawing.Graphics graphics;
-
         System.Drawing.Color color;
 
 
@@ -51,15 +52,13 @@ namespace PainterApplication
 
             SelectBrushTool();
             
-
+            bmp = new System.Drawing.Bitmap(642, 445); 
             LoadRenderer();
 
-            fillTool.ImageData = bmp;
-            fillTool.Color = System.Drawing.Color.Black;
-            lineTool.ImageData = bmp;
+            SetColor(System.Drawing.Color.Black);
             lineTool.Color = System.Drawing.Color.Black;
-            channelsTool.ImageData = bmp;
-            hsvTool.ImageData = bmp;
+
+
         }
 
         private void SetColor(System.Drawing.Color newColor)
@@ -71,7 +70,6 @@ namespace PainterApplication
 
         private void LoadRenderer()
         {
-            bmp = new System.Drawing.Bitmap(642, 445);
             graphics = System.Drawing.Graphics.FromImage(bmp);
 
             System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
@@ -88,7 +86,10 @@ namespace PainterApplication
 
             bmp.UnlockBits(bmpData);
 
+            SetToolsTarget();
             Render();
+
+
         }
 
         [DllImport("gdi32")]
@@ -117,14 +118,23 @@ namespace PainterApplication
             mainImage.Source = loadBitmap(bmp);
         }
         
-        private void OpenImage(BitmapImage bmp)
+        private void SetToolsTarget()
         {
-            //DrawingVisual drawingVisual = new DrawingVisual();
-            //var rect = new System.Windows.Rect(0, 0, 
-            //    mainImage.DesiredSize.Width, mainImage.DesiredSize.Height);
-            //using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-            //    drawingContext.DrawImage(bmp, rect);
-            //renderTargetBitmap.Render(drawingVisual);
+            fillTool.ImageData = bmp;
+            lineTool.ImageData = bmp;
+            channelsTool.ImageData = bmp;
+            hsvTool.ImageData = bmp;
+            channelsTool.ChannelsWindow = channelsWindow;
+            channelsWindow.ChannelsTool = channelsTool;
+            channelsTool.MainWindow = this;
+        }
+
+        private void OpenImage(Bitmap bmp)
+        {
+            this.bmp = bmp;
+            this.graphics = System.Drawing.Graphics.FromImage(bmp);
+            SetToolsTarget();
+            Render();
         }
 
         private void openButton_Click(object sender, RoutedEventArgs e)
@@ -136,7 +146,7 @@ namespace PainterApplication
             {
                 var filename = dialog.FileName;
                 
-                OpenImage(new BitmapImage(new Uri(filename)));
+                OpenImage(new Bitmap(filename));
             }
 
         }
@@ -267,6 +277,12 @@ namespace PainterApplication
 
         private void channelsButton_Click(object sender, RoutedEventArgs e)
         {
+            if (channelsWindow == null)
+            {
+                channelsWindow = new ChannelsWindow();
+                channelsWindow.ChannelsTool = this.channelsTool;
+                channelsTool.ChannelsWindow = channelsWindow;
+            }
             channelsWindow.ShowDialog();
         }
 

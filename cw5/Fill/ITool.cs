@@ -13,4 +13,5 @@ namespace PainterApplication
         void Up(Graphics target, Point pos);
         void Move(Graphics target, Point pos);
     }
+
 }

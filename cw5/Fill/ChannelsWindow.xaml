@@ -7,11 +7,10 @@
         mc:Ignorable="d"
         Title="ChannelsWindow" Height="300" Width="300" ResizeMode="NoResize">
     <Grid>
-        <Button x:Name="applyButton" Content="Apply" HorizontalAlignment="Left" Margin="207,243,0,0" VerticalAlignment="Top" Width="75"/>
-        <CheckBox x:Name="redCheckBox" Content="Red" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <CheckBox x:Name="redCheckBox_Copy" Content="Green" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <CheckBox x:Name="redCheckBox_Copy1" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <Button x:Name="applyButton_Copy" Content="Revert" HorizontalAlignment="Left" Margin="10,243,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="applyButton" Content="Apply" HorizontalAlignment="Left" Margin="207,243,0,0" VerticalAlignment="Top" Width="75" Click="applyButton_Click"/>
+        <CheckBox x:Name="redCheckBox" Content="Red" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Checked="redCheckBox_Checked"/>
+        <CheckBox x:Name="redCheckBox_Copy" Content="Green" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True" Checked="redCheckBox_Copy_Checked"/>
+        <CheckBox x:Name="redCheckBox_Copy1" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="True" Checked="redCheckBox_Copy1_Checked"/>
 
     </Grid>
 </Window>

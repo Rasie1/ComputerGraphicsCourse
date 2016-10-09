@@ -19,9 +19,32 @@ namespace PainterApplication
     /// </summary>
     public partial class ChannelsWindow : Window
     {
+        public ChannelsTool ChannelsTool { get; set; }
         public ChannelsWindow()
         {
             InitializeComponent();
+        }
+
+        //green, todo: decent name
+        private void redCheckBox_Copy_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void redCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        // blue
+        private void redCheckBox_Copy1_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void applyButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChannelsTool.ApplyFilter();
         }
     }
 }

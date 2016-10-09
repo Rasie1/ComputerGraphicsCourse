@@ -61,6 +61,7 @@
       <DependentUpon>ChannelsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="HSVTool.cs" />
+    <Compile Include="IFilter.cs" />
     <Compile Include="LineTool.cs" />
     <Compile Include="ITool.cs" />
     <Page Include="ChannelsWindow.xaml">
