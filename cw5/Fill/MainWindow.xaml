@@ -9,14 +9,15 @@
     <Grid>
         <Image x:Name="mainImage" Margin="10,40,10,10" MouseLeftButtonDown="mainImage_MouseLeftButtonDown" Stretch="None" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseMove="mainImage_MouseMove" MouseLeftButtonUp="mainImage_MouseLeftButtonUp" Source="placeholder.png" MouseLeave="mainImage_MouseLeave" MouseEnter="mainImage_MouseEnter"/>
         <Button x:Name="openButton" Content="📂" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Width="20" Click="openButton_Click"/>
-        <Label x:Name="label" Content="Welcome!&#xD;&#xA;" Margin="70,7,200,12" VerticalAlignment="Top" Height="25"/>
+        <Label x:Name="label" Content="Welcome!&#xD;&#xA;" Margin="70,7,230,12" VerticalAlignment="Top" Height="25"/>
         <Button x:Name="brushButton" Content="🖌" HorizontalAlignment="Right" Margin="0,10,10,10" VerticalAlignment="Top" Width="20" Click="brushButton_Click"/>
         <Button x:Name="fillButton" Content="▧" Margin="0,10,40,10" VerticalAlignment="Top" Width="20" Click="fillButton_Click" HorizontalAlignment="Right"/>
         <Button x:Name="saveButton" Content="💾" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top" Width="20" Click="saveButton_Click"/>
         <Image x:Name="colorImage" HorizontalAlignment="Right" Height="20" Margin="0,10,70,0" VerticalAlignment="Top" Width="20" MouseDown="colorImage_MouseDown"/>
         <Button x:Name="lineButton" Content="/" Margin="0,10,100,0" VerticalAlignment="Top" Width="20" HorizontalAlignment="Right" AutomationProperties.HelpText="Border Detection" Click="borderDetectionButton_Click"/>
-        <Button x:Name="hsvButton" Content="HSV" Margin="0,10,160,0" VerticalAlignment="Top" Width="30" HorizontalAlignment="Right" AutomationProperties.HelpText="Border Detection" Click="borderDetectionButton_Click"/>
+        <Button x:Name="hsvButton" Content="HSV" Margin="0,10,160,0" VerticalAlignment="Top" Width="30" HorizontalAlignment="Right" AutomationProperties.HelpText="Border Detection" Click="hsvButton_Click"/>
         <Button x:Name="channelsButton" Content="Сh" Margin="0,10,130,0" VerticalAlignment="Top" Width="20" HorizontalAlignment="Right" AutomationProperties.HelpText="Border Detection" Click="channelsButton_Click"/>
+        <Button x:Name="channelsButton_Copy" Content="Gr" Margin="0,10,200,0" VerticalAlignment="Top" Width="20" HorizontalAlignment="Right" AutomationProperties.HelpText="Border Detection" Click="grayscaleButton_Click"/>
 
     </Grid>
 </Window>

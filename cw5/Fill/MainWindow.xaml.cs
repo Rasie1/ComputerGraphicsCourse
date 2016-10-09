@@ -37,6 +37,7 @@ namespace PainterApplication
         FillTool fillTool = new FillTool();
         LineTool lineTool = new LineTool();
         ChannelsTool channelsTool = new ChannelsTool();
+        GrayscaleTool grayscaleTool = new GrayscaleTool();
         HSVTool hsvTool = new HSVTool();
         ChannelsWindow channelsWindow = new ChannelsWindow();
 
@@ -127,6 +128,7 @@ namespace PainterApplication
             channelsTool.ChannelsWindow = channelsWindow;
             channelsWindow.ChannelsTool = channelsTool;
             channelsTool.MainWindow = this;
+            grayscaleTool.ImageData = bmp;
         }
 
         private void OpenImage(Bitmap bmp)
@@ -192,6 +194,7 @@ namespace PainterApplication
 
         private void UnblockToolButtons()
         {
+            hsvButton.IsEnabled = true;
             fillButton.IsEnabled = true;
             brushButton.IsEnabled = true;
             lineButton.IsEnabled = true;
@@ -288,7 +291,19 @@ namespace PainterApplication
 
         private void hsvButton_Click(object sender, RoutedEventArgs e)
         {
+            SelectHSVTool();
+        }
 
+        private void SelectHSVTool()
+        {
+            new HSVWindow().ShowDialog();
+            ShowMessageInToolbox("Still not implemented fully!");
+
+        }
+
+        private void grayscaleButton_Click(object sender, RoutedEventArgs e)
+        {
+            Render();
         }
     }
 }

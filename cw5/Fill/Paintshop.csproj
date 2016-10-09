@@ -60,11 +60,19 @@
     <Compile Include="ChannelsWindow.xaml.cs">
       <DependentUpon>ChannelsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GrayscaleTool.cs" />
     <Compile Include="HSVTool.cs" />
+    <Compile Include="HSVWindow.xaml.cs">
+      <DependentUpon>HSVWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IFilter.cs" />
     <Compile Include="LineTool.cs" />
     <Compile Include="ITool.cs" />
     <Page Include="ChannelsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HSVWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
