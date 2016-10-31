@@ -5,23 +5,6 @@ case object Right extends Side
 case object Center extends Side
 
 case class Edge(a: (Double, Double), b: (Double, Double)) {
-    def compareSide(a: Double, b: Double) : Side = {
-        // todo
-        if (a < b)
-            return Left
-        if (a > b)
-            return Right
-        return Center
-    }
-
-    def pointSide(point: (Double, Double)) : Side = (point, a, b) match {
-        case ((x, y), (aX, aY), (bX, bY)) => {
-            if (aY < bY)
-                return compareSide(x, aX)
-            return Center
-        }
-    }
-
     def rotatePoint(center: (Double, Double), angle: Double, 
                     point: (Double, Double)) : (Double, Double) = {
         var s = Math.sin(angle)
@@ -93,4 +76,20 @@ case class Edge(a: (Double, Double), b: (Double, Double)) {
         }
     }
 
+    def compareSide(a: Double, b: Double) : Side = {
+        // todo
+        if (a < b)
+            return Left
+        if (a > b)
+            return Right
+        return Center
+    }
+
+    def pointSide(point: (Double, Double)) : Side = (point, a, b) match {
+        case ((x, y), (aX, aY), (bX, bY)) => {
+            if (aY < bY)
+                return compareSide(x, aX)
+            return Center
+        }
+    }
 }

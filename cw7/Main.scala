@@ -15,7 +15,7 @@ object Main extends App {
     Console.println("Многоугольник");
     Console.println(edges);
 
-    Console.println("Положение точки (1.0, 1.0) относительно ребер")
+    Console.println("Положение точки (1.0, 1.0) относительно ребер (not fully done)")
     Console.println(edges map (e => e.pointSide(point1)))
 
     Console.println("Принадлежит ли (1.0, 1.0)")
