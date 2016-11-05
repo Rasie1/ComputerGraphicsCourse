@@ -1,4 +1,4 @@
-class Polygon(edges: List[Edge]) {
+class Polygon(val edges: List[Edge]) {
     def contains(point: (Double, Double)) : Boolean = {
         val hugeNumber: Double = 90000000000000.0 
         val checkerEdge = Edge((hugeNumber, hugeNumber), point)

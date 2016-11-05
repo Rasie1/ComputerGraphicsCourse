@@ -3,6 +3,8 @@ import java.awt.{Color, Graphics2D, Dimension, Font, BasicStroke}
 import java.awt.image.BufferedImage
 import java.awt.geom._
 
+
+
 object Config {
     final val WindowSize = (512, 512)
 }
@@ -10,11 +12,14 @@ object Config {
 class DataPanel extends Panel {
 
   def drawEdge(g: Graphics2D, e: Edge) {
-    g.draw(new Line2D.Double(e._1._1, e._1._2, 
-                             e._2._1, e._2._2))
+    g.draw(new Line2D.Double(e.a._1, e.a._2, 
+                             e.b._1, e.b._2))
   }
 
-  def paintPolygon(g: Graphics2D, p: Polygon) {
+  def drawPolygon(g: Graphics2D, p: Polygon) {
+
+    g.setStroke(new BasicStroke())  // reset to default
+    g.setColor(new Color(0, 0, 255)) // same as Color.BLUE
     p.edges map (e => drawEdge(g, e))
   }
 
@@ -43,30 +48,18 @@ class DataPanel extends Panel {
     g.setColor(Color.WHITE)
     g.fillRect(0, 0, canvas.getWidth, canvas.getHeight)
 
-    // enable anti-aliased rendering (prettier lines and circles)
-    // Comment it out to see what this does!
-    g.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, 
-                       java.awt.RenderingHints.VALUE_ANTIALIAS_ON)
+    val offset = 128
 
-    g.setColor(Color.RED)
-    g.fill(new Ellipse2D.Double(30.0, 30.0, 40.0, 40.0))
-    g.fill(new Ellipse2D.Double(230.0, 380.0, 40.0, 40.0))
+    var edges = List(
+      Edge((offset + 0, offset + 0), (offset + 0, offset + 200)),
+      Edge((offset + 0, offset + 200), (offset + 200, offset + 200)),
+      Edge((offset + 200, offset + 200), (offset + 100, offset + 100)),
+      Edge((offset + 100, offset + 100), (offset + 200, offset + 0)),
+      Edge((offset + 200, offset + 0), (offset + 0, offset + 0)))
 
-    g.setColor(Color.MAGENTA)
-    g.setStroke(new BasicStroke(3f))
-    g.draw(new Ellipse2D.Double(400.0, 35.0, 30.0, 30.0))
+    var polygon = new Polygon(edges)
 
-    g.setColor(Color.CYAN)
-    g.fill(new Rectangle2D.Double(20.0, 400.0, 50.0, 20.0))
-    g.draw(new Rectangle2D.Double(400.0, 400.0, 50.0, 20.0))
-
-    g.setStroke(new BasicStroke())  // reset to default
-    g.setColor(new Color(0, 0, 255)) // same as Color.BLUE
-    g.draw(new Line2D.Double(50.0, 50.0, 250.0, 400.0))
-
-    g.setColor(new Color(0, 128, 0)) // a darker green
-    g.setFont(new Font("Batang", Font.PLAIN, 20))
-    g.drawString("Hello World!", 155, 225)
+    drawPolygon(g, polygon)
 
     g.dispose()
   }
@@ -76,14 +69,6 @@ class DataPanel extends Panel {
 
 object Draw extends SimpleSwingApplication {
 
-  var edges = List(
-    Edge((0, 0), (0, 2)),
-    Edge((0, 2), (2, 2)),
-    Edge((2, 2), (1, 1)),
-    Edge((1, 1), (2, 0)),
-    Edge((2, 0), (0, 0)))
-
-  var polygon = new Polygon(edges)
 
   def top = new MainFrame {
     contents = new DataPanel {
