@@ -1,25 +1,74 @@
 import swing.{Panel, MainFrame, SimpleSwingApplication}
-import java.awt.{Color, Graphics2D, Dimension}
+import java.awt.{Color, Graphics2D, Dimension, Font, BasicStroke}
+import java.awt.image.BufferedImage
+import java.awt.geom._
 
-class DataPanel(data: Array[Array[Color]]) extends Panel {
+object Config {
+    final val WindowSize = (512, 512)
+}
+
+class DataPanel extends Panel {
+
+  def drawEdge(g: Graphics2D, e: Edge) {
+    g.draw(new Line2D.Double(e._1._1, e._1._2, 
+                             e._2._1, e._2._2))
+  }
+
+  def paintPolygon(g: Graphics2D, p: Polygon) {
+    p.edges map (e => drawEdge(g, e))
+  }
+
 
   override def paintComponent(g: Graphics2D) {
-    val dx = g.getClipBounds.width.toFloat  / data.length
-    val dy = g.getClipBounds.height.toFloat / data.map(_.length).max
-    for {
-      x <- 0 until data.length
-      y <- 0 until data(x).length
-      x1 = (x * dx).toInt
-      y1 = (y * dy).toInt
-      x2 = ((x + 1) * dx).toInt
-      y2 = ((y + 1) * dy).toInt
-    } {
-      data(x)(y) match {
-        case c: Color => g.setColor(c)
-        case _ => g.setColor(Color.WHITE)
-      }
-      g.fillRect(x1, y1, x2 - x1, y2 - y1)
-    }
+    // val dx = g.getClipBounds.width.toFloat  / data.length
+    // val dy = g.getClipBounds.height.toFloat / data.map(_.length).max
+    // for {
+    //   x <- 0 until data.length
+    //   y <- 0 until data(x).length
+    //   x1 = (x * dx).toInt
+    //   y1 = (y * dy).toInt
+    //   x2 = ((x + 1) * dx).toInt
+    //   y2 = ((y + 1) * dy).toInt
+    // } {
+    //   data(x)(y) match {
+    //     case c: Color => g.setColor(c)
+    //     case _ => g.setColor(Color.WHITE)
+    //   }
+    //   g.fillRect(x1, y1, x2 - x1, y2 - y1)
+    // }
+    val size = Config.WindowSize
+
+    val canvas = new BufferedImage(size._1, size._2, BufferedImage.TYPE_INT_RGB)
+
+    g.setColor(Color.WHITE)
+    g.fillRect(0, 0, canvas.getWidth, canvas.getHeight)
+
+    // enable anti-aliased rendering (prettier lines and circles)
+    // Comment it out to see what this does!
+    g.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, 
+                       java.awt.RenderingHints.VALUE_ANTIALIAS_ON)
+
+    g.setColor(Color.RED)
+    g.fill(new Ellipse2D.Double(30.0, 30.0, 40.0, 40.0))
+    g.fill(new Ellipse2D.Double(230.0, 380.0, 40.0, 40.0))
+
+    g.setColor(Color.MAGENTA)
+    g.setStroke(new BasicStroke(3f))
+    g.draw(new Ellipse2D.Double(400.0, 35.0, 30.0, 30.0))
+
+    g.setColor(Color.CYAN)
+    g.fill(new Rectangle2D.Double(20.0, 400.0, 50.0, 20.0))
+    g.draw(new Rectangle2D.Double(400.0, 400.0, 50.0, 20.0))
+
+    g.setStroke(new BasicStroke())  // reset to default
+    g.setColor(new Color(0, 0, 255)) // same as Color.BLUE
+    g.draw(new Line2D.Double(50.0, 50.0, 250.0, 400.0))
+
+    g.setColor(new Color(0, 128, 0)) // a darker green
+    g.setFont(new Font("Batang", Font.PLAIN, 20))
+    g.drawString("Hello World!", 155, 225)
+
+    g.dispose()
   }
 }
 
@@ -36,31 +85,9 @@ object Draw extends SimpleSwingApplication {
 
   var polygon = new Polygon(edges)
 
-  var point1 = (1.0, 1.0)
-  var point2 = (5.0, 5.0)
-  var point3 = (0.5, 0.5)
-  val data = Array.ofDim[Color](25, 25)
-
-  // plot some points
-  data(0)(0) = Color.BLACK
-  data(4)(4) = Color.RED
-  data(0)(4) = Color.GREEN
-  data(4)(0) = Color.BLUE
-
-  // draw a circle 
-  import math._
-  {
-    for {
-      t <- Range.Double(0, 2 * Pi, Pi / 60)
-      x = 12.5 + 10 * cos(t)
-      y = 12.5 + 10 * sin(t)
-      c = new Color(0.5f, 0f, (t / 2 / Pi).toFloat)
-    } data(x.toInt)(y.toInt) = c
-  }
-
   def top = new MainFrame {
-    contents = new DataPanel(data) {
-      preferredSize = new Dimension(300, 300)
+    contents = new DataPanel {
+      preferredSize = new Dimension(Config.WindowSize._1, Config.WindowSize._2)
     }
   }
 }
@@ -91,60 +118,3 @@ object Draw extends SimpleSwingApplication {
 //          if triangle contains a vertex from original super-triangle
 //             remove triangle from triangulation
 //       return triangulation
-
-
-
-// import java.awt.image.BufferedImage
-// import java.awt.{Graphics2D,Color,Font,BasicStroke}
-// import java.awt.geom._
-// object Main extends App { 
-//     // Size of image
-//     val size = (500, 500)
-
-//     // create an image
-//     val canvas = new BufferedImage(size._1, size._2, BufferedImage.TYPE_INT_RGB)
-
-//     // get Graphics2D for the image
-//     val g = canvas.createGraphics()
-
-//     // clear background
-//     g.setColor(Color.WHITE)
-//     g.fillRect(0, 0, canvas.getWidth, canvas.getHeight)
-
-//     // enable anti-aliased rendering (prettier lines and circles)
-//     // Comment it out to see what this does!
-//     g.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, 
-//                java.awt.RenderingHints.VALUE_ANTIALIAS_ON)
-
-//     // draw two filled circles
-//     g.setColor(Color.RED)
-//     g.fill(new Ellipse2D.Double(30.0, 30.0, 40.0, 40.0))
-//     g.fill(new Ellipse2D.Double(230.0, 380.0, 40.0, 40.0))
-
-//     // draw an unfilled circle with a pen of width 3
-//     g.setColor(Color.MAGENTA)
-//     g.setStroke(new BasicStroke(3f))
-//     g.draw(new Ellipse2D.Double(400.0, 35.0, 30.0, 30.0))
-
-//     // draw a filled and an unfilled Rectangle
-//     g.setColor(Color.CYAN)
-//     g.fill(new Rectangle2D.Double(20.0, 400.0, 50.0, 20.0))
-//     g.draw(new Rectangle2D.Double(400.0, 400.0, 50.0, 20.0))
-
-//     // draw a line
-//     g.setStroke(new BasicStroke())  // reset to default
-//     g.setColor(new Color(0, 0, 255)) // same as Color.BLUE
-//     g.draw(new Line2D.Double(50.0, 50.0, 250.0, 400.0))
-
-//     // draw some text
-//     g.setColor(new Color(0, 128, 0)) // a darker green
-//     g.setFont(new Font("Batang", Font.PLAIN, 20))
-//     g.drawString("Hello World!", 155, 225)
-//     g.drawString("안녕 하세요", 175, 245)
-
-//     // done with drawing
-//     g.dispose()
-
-//     // write image to a file
-//     javax.imageio.ImageIO.write(canvas, "png", new java.io.File("drawing.png"))
-// } 
