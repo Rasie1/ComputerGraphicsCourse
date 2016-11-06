@@ -3,12 +3,6 @@ import java.awt.{Color, Graphics2D, Dimension, Font, BasicStroke}
 import java.awt.image.BufferedImage
 import java.awt.geom._
 
-
-
-object Config {
-    final val WindowSize = (512, 512)
-}
-
 class DataPanel extends Panel {
 
   def drawEdge(g: Graphics2D, e: Edge) {
@@ -25,41 +19,69 @@ class DataPanel extends Panel {
 
 
   override def paintComponent(g: Graphics2D) {
-    // val dx = g.getClipBounds.width.toFloat  / data.length
-    // val dy = g.getClipBounds.height.toFloat / data.map(_.length).max
-    // for {
-    //   x <- 0 until data.length
-    //   y <- 0 until data(x).length
-    //   x1 = (x * dx).toInt
-    //   y1 = (y * dy).toInt
-    //   x2 = ((x + 1) * dx).toInt
-    //   y2 = ((y + 1) * dy).toInt
-    // } {
-    //   data(x)(y) match {
-    //     case c: Color => g.setColor(c)
-    //     case _ => g.setColor(Color.WHITE)
-    //   }
-    //   g.fillRect(x1, y1, x2 - x1, y2 - y1)
-    // }
     val size = Config.WindowSize
+
 
     val canvas = new BufferedImage(size._1, size._2, BufferedImage.TYPE_INT_RGB)
 
     g.setColor(Color.WHITE)
     g.fillRect(0, 0, canvas.getWidth, canvas.getHeight)
 
-    val offset = 128
 
-    var edges = List(
-      Edge((offset + 0, offset + 0), (offset + 0, offset + 200)),
-      Edge((offset + 0, offset + 200), (offset + 200, offset + 200)),
-      Edge((offset + 200, offset + 200), (offset + 100, offset + 100)),
-      Edge((offset + 100, offset + 100), (offset + 200, offset + 0)),
-      Edge((offset + 200, offset + 0), (offset + 0, offset + 0)))
+    val customPolygon = true
+    var points: List[(Float, Float)] = List[(Float, Float)]()
 
-    var polygon = new Polygon(edges)
+    if (customPolygon) {
+      // // Square
+      // points = List[(Float, Float)](
+      //   (10, 10), 
+      //   (110, 10), 
+      //   (110, 110), 
+      //   (10, 110)
+      //   )
+      points = List[(Float, Float)](
+        (10, 10), 
+        (110, 10), 
+        (210, 110), 
+        (310, 210), 
+        (360, 260), 
+        (410, 410),
+        (310, 510),
+        (100, 310),
+        (50, 210)
+        )
+    } else {
+      val n = 20
 
-    drawPolygon(g, polygon)
+      points = (for {i <- 0 until n} yield 
+                  ((i * Config.WindowSize._1 / n).toFloat, 
+                   (Math.random() * Config.WindowSize._2).toFloat)).toList
+    }
+
+    val triangles = Delaunay.triangulate(points)
+
+
+    g.setStroke(new BasicStroke(5))  
+    g.setColor(new Color(255, 0, 0)) 
+
+    for {i <- 1 until points.length} yield drawEdge(g, Edge(points(i - 1), points(i)))
+    drawEdge(g, Edge(points(0), points(points.length - 1)))
+
+    
+    g.setStroke(new BasicStroke())  
+    g.setColor(new Color(0, 0, 255)) 
+
+    triangles map { t => {
+        drawEdge(g, Edge((points(t._1)._1, points(t._1)._2),
+                         (points(t._2)._1, points(t._2)._2)));
+        drawEdge(g, Edge((points(t._3)._1, points(t._3)._2),
+                         (points(t._2)._1, points(t._2)._2)));
+        drawEdge(g, Edge((points(t._1)._1, points(t._1)._2),
+                         (points(t._3)._1, points(t._3)._2)));
+      }
+    }
+
+
 
     g.dispose()
   }
@@ -76,30 +98,3 @@ object Draw extends SimpleSwingApplication {
     }
   }
 }
-
-
-
-
-// function BowyerWatson (pointList)
-//       // pointList is a set of coordinates defining the points to be triangulated
-//       triangulation := empty triangle mesh data structure
-//       add super-triangle to triangulation // must be large enough to completely contain all the points in pointList
-//       for each point in pointList do // add all the points one at a time to the triangulation
-//          badTriangles := empty set
-//          for each triangle in triangulation do // first find all the triangles that are no longer valid due to the insertion
-//             if point is inside circumcircle of triangle
-//                add triangle to badTriangles
-//          polygon := empty set
-//          for each triangle in badTriangles do // find the boundary of the polygonal hole
-//             for each edge in triangle do
-//                if edge is not shared by any other triangles in badTriangles
-//                   add edge to polygon
-//          for each triangle in badTriangles do // remove them from the data structure
-//             remove triangle from triangulation
-//          for each edge in polygon do // re-triangulate the polygonal hole
-//             newTri := form a triangle from edge to point
-//             add newTri to triangulation
-//       for each triangle in triangulation // done inserting points, now clean up
-//          if triangle contains a vertex from original super-triangle
-//             remove triangle from triangulation
-//       return triangulation

@@ -4,11 +4,11 @@ case object Left extends Side
 case object Right extends Side
 case object Center extends Side
 
-case class Edge(a: (Double, Double), b: (Double, Double)) {
-    def rotatePoint(center: (Double, Double), angle: Double, 
-                    point: (Double, Double)) : (Double, Double) = {
-        var s = Math.sin(angle)
-        var c = Math.cos(angle)
+case class Edge(a: (Float, Float), b: (Float, Float)) {
+    def rotatePoint(center: (Float, Float), angle: Float, 
+                    point: (Float, Float)) : (Float, Float) = {
+        val s = Math.sin(angle).toFloat
+        val c = Math.cos(angle).toFloat
   
         var (px, py) = point
         var (cx, cy) = center
@@ -25,12 +25,12 @@ case class Edge(a: (Double, Double), b: (Double, Double)) {
         return (px, py)
     }
 
-    def rotate(angle: Double, center: (Double, Double)) : Edge = {
+    def rotate(angle: Float, center: (Float, Float)) : Edge = {
         return Edge(rotatePoint(center, angle, a), 
                     rotatePoint(center, angle, b))
     }
 
-    def center() : (Double, Double) = {
+    def center() : (Float, Float) = {
         (a, b) match {
             case ((aX, aY), (bX, bY)) => 
                 ((aX + bX) / 2, (aY + bY) / 2)
@@ -41,7 +41,7 @@ case class Edge(a: (Double, Double), b: (Double, Double)) {
         return rotate(90, center())
     }
 
-    def intersect(other: Edge) : Option[(Double, Double)] = { 
+    def intersect(other: Edge) : Option[(Float, Float)] = { 
         (other, a, b) match {
             case (Edge((p0_x, p0_y), (p1_x, p1_y)), (p2_x, p2_y), (p3_x, p3_y)) => {
                 var s10_x = p1_x - p0_x
@@ -76,7 +76,7 @@ case class Edge(a: (Double, Double), b: (Double, Double)) {
         }
     }
 
-    def compareSide(a: Double, b: Double) : Side = {
+    def compareSide(a: Float, b: Float) : Side = {
         // todo
         if (a < b)
             return Left
@@ -85,7 +85,7 @@ case class Edge(a: (Double, Double), b: (Double, Double)) {
         return Center
     }
 
-    def pointSide(point: (Double, Double)) : Side = (point, a, b) match {
+    def pointSide(point: (Float, Float)) : Side = (point, a, b) match {
         case ((x, y), (aX, aY), (bX, bY)) => {
             if (aY < bY)
                 return compareSide(x, aX)
